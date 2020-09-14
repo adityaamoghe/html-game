@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Image Matching Game - Part 4 </title>
+
+	<meta name="author" content="Andy Moghe">
+
+	<style>
+		img {
+			position: absolute
+		}
+
+		div {
+			position: absolute;
+			padding: 0px;
+			border: 0px;
+			margin: 10px;
+			left: 0px;
+			width: 500px;
+			height: 500px
+		}
+
+		#rightSide {
+			left: 500px;
+			border-left: 1px solid black
+		}
+	</style>
+
+</head>
+
+<body id="theBody">
+	<h1>Matching Game</h1>
+	<h3>Click on the extra smiling face on the left.</h3>
+	<div id="leftSide"></div>
+	<div id="rightSide"></div>
+
+	<script>
+		var numberOfFaces = 5;
+		var theLeftSide = document.getElementById("leftSide");
+		var theRightSide = document.getElementById("rightSide");
+		var top_position = 25,left_position = 25;
+		var theBody = document.getElementsByTagName("body")[0];
+
+		
+
+        theBody.onclick = function gameOver() {
+										    alert("Wrong move. Game Over!");
+										    theBody.onclick = null;
+										    theLeftSide.lastChild.onclick = null;
+
+										};								
+
+		function generateFaces() {
+			for (var index = 0; index < numberOfFaces; index++) {
+
+				var newItem = document.createElement("img");
+				newItem.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+
+				newItem.style.top = generateRandomNumber(400) + "px";
+				newItem.style.left = generateRandomNumber(400) + "px";
+				newItem.style.width = "100px";
+				newItem.style.height = "100px";
+				theLeftSide.appendChild(newItem);
+			}//for
+
+			theLeftSide.lastChild.onclick = function nextLevel(event) {
+       						 				event.stopPropagation();
+       						 				numberOfFaces += 5;
+       						 				delete_all_children (theLeftSide);
+       						 				delete_all_children (theRightSide);
+        					 				generateFaces();
+        								};
+
+			//Remove the last child 
+			var leftSideImages = theLeftSide.cloneNode(true);
+			leftSideImages.removeChild(leftSideImages.lastChild);
+			theRightSide.appendChild ( leftSideImages);
+
+
+
+		}
+
+		function generateRandomNumber(position_range) {
+			var random_number = Math.random() * position_range;
+			random_number = Math.floor(random_number);
+			return random_number;
+		}
+
+		function delete_all_children( parent_node ) {
+                if ( parent_node != null ) {
+                	while (parent_node.firstChild) 
+                    	parent_node.removeChild(parent_node.firstChild);
+                }
+            }
+
+		window.onload = generateFaces;
+	</script>
+</body>
+
+</html>
